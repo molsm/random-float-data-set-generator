@@ -1,0 +1,25 @@
+{
+    "name": "molsm/random-float-data-set-generator",
+    "description": "Random float data set generator",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^6"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maris Mols",
+            "email": "maris9229@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MolsM\\RandomFloatDataSetGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MolsM\\RandomFloatDataSetGenerator\\Tests\\": "tests/"
+        }
+    }
+}
