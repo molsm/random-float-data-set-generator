@@ -16,10 +16,5 @@
         "psr-4": {
             "MolsM\\RandomFloatDataSetGenerator\\": "src/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "MolsM\\RandomFloatDataSetGenerator\\Tests\\": "tests/"
-        }
     }
 }
