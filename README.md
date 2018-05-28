@@ -1,0 +1,1 @@
+# Random float data set generator [![Build Status](https://travis-ci.org/molsm/random-float-data-set-generator.svg?branch=master)](https://travis-ci.org/molsm/random-float-data-set-generator)
