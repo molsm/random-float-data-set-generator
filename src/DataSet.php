@@ -14,6 +14,10 @@ class DataSet implements DataSetInterface
      */
     private $amount;
 
+    /**
+     * DataSet constructor.
+     * @param float $amount
+     */
     public function __construct(float $amount)
     {
         $this->amount = $amount;
@@ -61,8 +65,24 @@ class DataSet implements DataSetInterface
             $datum->fillTillMaximum();
         }
 
-        while ($this->amount !== $this->setSum()) {
-            break;
+        while ($this->amount !== ($sum = $this->getSum())) {
+            if ($sum < $this->amount) {
+                throw new \LogicException(
+                    'Sum of datums became lower than settled amount. Generator does not know what to do next.'
+                );
+            }
         }
+    }
+
+    /**
+     * @return float
+     */
+    private function getSum(): float
+    {
+        return array_reduce($this->set, function ($carry, $datum) {
+            /** @var DatumInterface $datum */
+            $carry += $datum->getValue();
+            return $carry;
+        });
     }
 }

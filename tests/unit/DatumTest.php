@@ -1,5 +1,7 @@
 <?php
 
+namespace MolsM\RandomFloatDataSetGenerator\Tests;
+
 use PHPUnit\Framework\TestCase;
 use MolsM\RandomFloatDataSetGenerator\Datum;
 
@@ -9,7 +11,7 @@ use MolsM\RandomFloatDataSetGenerator\Datum;
 class DatumTest extends TestCase
 {
     /**
-     * @cover Datum::getValue()
+     * @covers Datum::getValue()
      */
     public function testDefaultValueIsZeroFloat()
     {
@@ -18,7 +20,7 @@ class DatumTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @cover Datum::shouldBeBetween()
+     * @covers Datum::shouldBeBetween()
      */
     public function testBetweenSettleRanges()
     {
@@ -27,7 +29,7 @@ class DatumTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @cover Datum::fillTillMaximum()
+     * @covers Datum::fillTillMaximum()
      */
     public function testIfDatumCanNotBeFilledTillMaximum()
     {
@@ -35,7 +37,7 @@ class DatumTest extends TestCase
     }
 
     /**
-     * @cover Datum::fillTillMaximum()
+     * @covers Datum::fillTillMaximum()
      */
     public function testIfDatumCanBeFilledTillMaximum()
     {
