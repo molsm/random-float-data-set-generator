@@ -9,6 +9,11 @@ parameters:
                 - "test/*.php"
             metadata:
                 priority: 300
+        phpunit:
+            config_file: ~
+            testsuite: ~
+            group: []
+            always_execute: false
         git_blacklist:
             keywords:
                 - "die("
