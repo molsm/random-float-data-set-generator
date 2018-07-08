@@ -3,7 +3,8 @@
     "description": "Random float data set generator",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^6"
+        "phpunit/phpunit": "^6",
+        "phpro/grumphp": "^0.14.1"
     },
     "license": "MIT",
     "authors": [
