@@ -1,5 +1,7 @@
 <?php
 
+namespace MolsM\RandomFloatDataSetGenerator\Tests;
+
 use PHPUnit\Framework\TestCase;
 use MolsM\RandomFloatDataSetGenerator\DataSet;
 
@@ -14,6 +16,6 @@ class DataSetTest extends TestCase
      */
     public function testThrowsExceptionWhenDatumSetIsEmpty()
     {
-        (new DataSet())->generate();
+        (new DataSet(0.0))->generate();
     }
 }
