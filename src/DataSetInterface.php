@@ -6,9 +6,10 @@ interface DataSetInterface
 {
     /**
      * @param DatumInterface $datum
+     * @param $id mixed
      * @return mixed
      */
-    public function addDatum(DatumInterface $datum): DataSetInterface;
+    public function addDatum(DatumInterface $datum, $id): DataSetInterface;
 
     /**
      * Return array key => float
