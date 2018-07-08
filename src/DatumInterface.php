@@ -10,14 +10,22 @@ interface DatumInterface
     public function getValue(): float;
 
     /**
-     * @param $byAmount
      * @return DatumInterface
+     * @throws \LogicException
      */
-    public function increaseValue($byAmount): DatumInterface;
+    public function fillTillMaximum(): DatumInterface;
 
     /**
      * @param $byAmount
      * @return DatumInterface
      */
-    public function decreaseValue($byAmount): DatumInterface;
+    public function decreaseValue(float $byAmount): DatumInterface;
+
+    /**
+     * @param float $from
+     * @param $to
+     * @return DatumInterface
+     * @throws \LogicException
+     */
+    public function shouldBeBetween(float $from, float $to): DatumInterface;
 }

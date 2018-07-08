@@ -11,11 +11,12 @@ class DataSet implements DataSetInterface
 
     /**
      * @param DatumInterface $datum
+     * @param $id mixed
      * @return DataSetInterface
      */
-    public function addDatum(DatumInterface $datum): DataSetInterface
+    public function addDatum(DatumInterface $datum, $id): DataSetInterface
     {
-        // TODO: Implement addDatum() method.
+        $this->set[$id] = $datum;
         return $this;
     }
 
@@ -26,12 +27,12 @@ class DataSet implements DataSetInterface
     public function generate(): array
     {
         if (empty($this->set)) {
-            throw new \LogicException('Datum set is empty. Expected at least one');
+            throw new \LogicException('Datum in set is empty. Expected at least one');
         }
 
         $result = [];
         foreach ($this->set as $datum) {
-            // TODO: Do someting
+            $datum->fill();
         }
 
         return $result;

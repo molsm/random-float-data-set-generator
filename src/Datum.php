@@ -5,31 +5,67 @@ namespace MolsM\RandomFloatDataSetGenerator;
 class Datum implements DatumInterface
 {
     /**
+     * @var float
+     */
+    private $value = 0.0;
+
+    /**
+     * @var float|null
+     */
+    private $from;
+
+    /**
+     * @var float|null
+     */
+    private $to;
+
+    /**
      * @return float
      */
     public function getValue(): float
     {
-        // TODO: Implement getValue() method.
-        return 0.0;
+        return $this->value;
     }
 
     /**
      * @param $byAmount
      * @return DatumInterface
      */
-    public function increaseValue($byAmount): DatumInterface
+    public function decreaseValue(float $byAmount): DatumInterface
     {
-        // TODO: Implement increaseValue() method.
+        // TODO: Implement decreaseValue() method.
         return $this;
     }
 
     /**
-     * @param $byAmount
+     * @param float $from
+     * @param float $to
+     * @return Datum
+     * @throws \LogicException
+     */
+    public function shouldBeBetween(float $from, float $to): DatumInterface
+    {
+        if ($from >= $to) {
+            throw new \LogicException('Incorrect data ranges');
+        }
+
+        $this->from = $from;
+        $this->to = $to;
+
+        return $this;
+    }
+
+    /**
      * @return DatumInterface
      */
-    public function decreaseValue($byAmount): DatumInterface
+    public function fillTillMaximum(): DatumInterface
     {
-        // TODO: Implement decreaseValue() method.
+        if ($this->from === null || $this->to === null) {
+            throw new \LogicException('Ranges are not settled');
+        }
+
+        $this->value = $this->to;
+
         return $this;
     }
 }
