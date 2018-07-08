@@ -10,6 +10,16 @@ class DataSet implements DataSetInterface
     private $set = [];
 
     /**
+     * @var float
+     */
+    private $amount;
+
+    public function __construct(float $amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
      * @param DatumInterface $datum
      * @param $id mixed
      * @return DataSetInterface
@@ -30,11 +40,29 @@ class DataSet implements DataSetInterface
             throw new \LogicException('Datum in set is empty. Expected at least one');
         }
 
+        $this->processSet();
+
         $result = [];
-        foreach ($this->set as $datum) {
-            $datum->fill();
+        /** @var DatumInterface $datum */
+        foreach ($this->set as $id => $datum) {
+            $result[$id] = $datum->getValue();
         }
 
         return $result;
+    }
+
+    /**
+     * @return void
+     */
+    private function processSet()
+    {
+        /** @var DatumInterface $datum */
+        foreach ($this->set as $datum) {
+            $datum->fillTillMaximum();
+        }
+
+        while ($this->amount !== $this->setSum()) {
+            break;
+        }
     }
 }
