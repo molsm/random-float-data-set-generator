@@ -35,4 +35,21 @@ interface DatumInterface
      * @return DatumInterface
      */
     public function priority(): DatumInterface;
+
+    /**
+     * @return bool
+     */
+    public function isPriority(): bool;
+
+    /**
+     * Skip datum if possible
+     *
+     * @return DatumInterface
+     */
+    public function skip(): DatumInterface;
+
+    /**
+     * @return bool
+     */
+    public function canBeSkippable(): bool;
 }

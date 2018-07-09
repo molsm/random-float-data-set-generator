@@ -2,8 +2,18 @@
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
+use function \MolsM\RandomFloatDataSetGenerator\shuffle_assoc;
+
 class DataSet implements DataSetInterface
 {
+    const PRE_DEFINED_RANDOM_STEPS_AMOUNT_MAP = [
+        '500.0' => [100.0, 50.0],
+        '100.0' => [25.0, 10.0],
+        '10.0' => [5.0],
+        '5.0' => [5.0],
+        '1.0' => [1.0],
+    ];
+
     /**
      * @var array
      */
@@ -17,15 +27,17 @@ class DataSet implements DataSetInterface
     /**
      * @var array
      */
-    private $preDefinedRandomStepsAmountMap = [];
+    private $preDefinedRandomStepsAmountMap;
 
     /**
      * DataSet constructor.
      * @param float $amount
      * @param array|null $preDefinedRandomStepsAmountMap
      */
-    public function __construct(float $amount, array $preDefinedRandomStepsAmountMap = null)
-    {
+    public function __construct(
+        float $amount,
+        array $preDefinedRandomStepsAmountMap = self::PRE_DEFINED_RANDOM_STEPS_AMOUNT_MAP
+    ) {
         $this->amount = $amount;
         $this->preDefinedRandomStepsAmountMap = $preDefinedRandomStepsAmountMap;
     }
@@ -78,6 +90,16 @@ class DataSet implements DataSetInterface
                     'Sum of datums became lower than settled amount. Generator does not know what to do next.'
                 );
             }
+
+            $difference = $sum - $this->amount;
+            $excludedDatums = [];
+
+            foreach ($this->getRandomSteps($difference) as $randomStep) {
+                try {
+                    $datum = $this->getRandomAvailableDatumFromSet($excludedDatums);
+                } catch (\Exception $exception) {
+                }
+            }
         }
     }
 
@@ -86,10 +108,10 @@ class DataSet implements DataSetInterface
      */
     private function getSum(): float
     {
-        return array_reduce($this->set, function ($carry, $datum) {
+        return array_reduce($this->set, function ($sum, $datum) {
             /** @var DatumInterface $datum */
-            $carry += $datum->getValue();
-            return $carry;
+            $sum += $datum->getValue();
+            return $sum;
         });
     }
 
@@ -103,7 +125,7 @@ class DataSet implements DataSetInterface
 
         foreach ($this->preDefinedRandomStepsAmountMap as $amount => $values) {
             if ((float) $amount <= $difference) {
-                $result = \MolsM\RandomFloatDataSetGenerator\shuffle_assoc($values);
+                $result = shuffle_assoc($values);
                 break;
             }
         }

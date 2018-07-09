@@ -22,7 +22,12 @@ class Datum implements DatumInterface
     /**
      * @var bool
      */
-    public $priority = false;
+    private $priority = false;
+
+    /**
+     * @var bool
+     */
+    private $skip = false;
 
     /**
      * @return float
@@ -82,5 +87,31 @@ class Datum implements DatumInterface
         $this->priority = true;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPriority(): bool
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @return DatumInterface
+     */
+    public function skip(): DatumInterface
+    {
+        $this->skip = true;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBeSkippable(): bool
+    {
+        return $this->skip;
     }
 }
