@@ -85,4 +85,19 @@ class DataSet implements DataSetInterface
             return $carry;
         });
     }
+
+    /**
+     * @param float $difference
+     * @param bool $takeSmallestOne
+     * @return array|mixed
+     */
+    private function getRandomSteps(float $difference, $takeSmallestOne = false)
+    {
+        // TODO: Implement logic
+    }
+
+    private function getRandomDatum(array $except): DatumInterface
+    {
+        // TODO: Implement logic
+    }
 }
