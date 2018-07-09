@@ -15,12 +15,19 @@ class DataSet implements DataSetInterface
     private $amount;
 
     /**
+     * @var array
+     */
+    private $preDefinedRandomStepsAmountMap = [];
+
+    /**
      * DataSet constructor.
      * @param float $amount
+     * @param array|null $preDefinedRandomStepsAmountMap
      */
-    public function __construct(float $amount)
+    public function __construct(float $amount, array $preDefinedRandomStepsAmountMap = null)
     {
         $this->amount = $amount;
+        $this->preDefinedRandomStepsAmountMap = $preDefinedRandomStepsAmountMap;
     }
 
     /**
@@ -88,15 +95,27 @@ class DataSet implements DataSetInterface
 
     /**
      * @param float $difference
-     * @param bool $takeSmallestOne
      * @return array|mixed
      */
-    private function getRandomSteps(float $difference, $takeSmallestOne = false)
+    private function getRandomSteps(float $difference)
     {
-        // TODO: Implement logic
+        $result = [];
+
+        foreach ($this->preDefinedRandomStepsAmountMap as $amount => $values) {
+            if ((float) $amount <= $difference) {
+                $result = \MolsM\RandomFloatDataSetGenerator\shuffle_assoc($values);
+                break;
+            }
+        }
+
+        return $result;
     }
 
-    private function getRandomDatum(array $except): DatumInterface
+    /**
+     * @param array $except
+     * @return DatumInterface
+     */
+    private function getRandomAvailableDatumFromSet(array $except): DatumInterface
     {
         // TODO: Implement logic
     }

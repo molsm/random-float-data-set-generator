@@ -20,6 +20,11 @@ class Datum implements DatumInterface
     private $to;
 
     /**
+     * @var bool
+     */
+    public $priority = false;
+
+    /**
      * @return float
      */
     public function getValue(): float
@@ -65,6 +70,16 @@ class Datum implements DatumInterface
         }
 
         $this->value = $this->to;
+
+        return $this;
+    }
+
+    /**
+     * @return DatumInterface
+     */
+    public function priority(): DatumInterface
+    {
+        $this->priority = true;
 
         return $this;
     }

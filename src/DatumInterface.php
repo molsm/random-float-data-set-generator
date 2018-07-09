@@ -28,4 +28,11 @@ interface DatumInterface
      * @throws \LogicException
      */
     public function shouldBeBetween(float $from, float $to): DatumInterface;
+
+    /**
+     * Make datum filled in priority
+     *
+     * @return DatumInterface
+     */
+    public function priority(): DatumInterface;
 }
