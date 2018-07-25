@@ -30,16 +30,15 @@ interface DatumInterface
     public function shouldBeBetween(float $from, float $to): DatumInterface;
 
     /**
-     * Make datum filled in priority
-     *
+     * @param int $priority
      * @return DatumInterface
      */
-    public function priority(): DatumInterface;
+    public function setPriority(int $priority): DatumInterface;
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPriority(): bool;
+    public function getPriority(): int;
 
     /**
      * Skip datum if possible

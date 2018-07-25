@@ -2,6 +2,7 @@
 
 namespace MolsM\RandomFloatDataSetGenerator\Tests;
 
+use MolsM\RandomFloatDataSetGenerator\DatumInterface;
 use PHPUnit\Framework\TestCase;
 use MolsM\RandomFloatDataSetGenerator\Datum;
 
@@ -42,5 +43,22 @@ class DatumTest extends TestCase
     public function testIfDatumCanBeFilledTillMaximum()
     {
         $this->assertEquals(200.0, (new Datum())->shouldBeBetween(100.0, 200.0)->fillTillMaximum()->getValue());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @cover Datum::setPriority()
+     */
+    public function testSetNegativePriorityNumber()
+    {
+        (new Datum())->setPriority(-1);
+    }
+
+    /**
+     * @cover Datum::setPriority()
+     */
+    public function testSetPositivePriorityNumber()
+    {
+        $this->assertInstanceOf(DatumInterface::class, (new Datum())->setPriority(1));
     }
 }

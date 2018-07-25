@@ -20,9 +20,9 @@ class Datum implements DatumInterface
     private $to;
 
     /**
-     * @var bool
+     * @var int
      */
-    private $priority = false;
+    private $priority = 0;
 
     /**
      * @var bool
@@ -80,19 +80,26 @@ class Datum implements DatumInterface
     }
 
     /**
+     * Set priority for Datum in order to fill them accordingly
+     *
+     * @param int $priority
      * @return DatumInterface
      */
-    public function priority(): DatumInterface
+    public function setPriority(int $priority): DatumInterface
     {
-        $this->priority = true;
+        if ($priority <= 0) {
+            throw new \LogicException('Priority must be positive integer number');
+        }
+
+        $this->priority = $priority;
 
         return $this;
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public function isPriority(): bool
+    public function getPriority(): int
     {
         return $this->priority;
     }

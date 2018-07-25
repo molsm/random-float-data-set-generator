@@ -37,13 +37,17 @@ class DataSetTest extends TestCase
             );
         }
 
-        $this->assertEquals($amount, array_reduce($dataSet->generate(), function ($carry, $datum) {
+        $resultSum = array_reduce($dataSet->generate(), function ($carry, $datum) {
             $carry += $datum;
             return $carry;
-        }));
+        });
+
+        $this->assertEquals($amount, $resultSum);
     }
 
     /**
+     * [[expected, [[from, to], [from, to] + 1....]]]
+     *
      * @return array
      */
     public function correctGeneration(): array
