@@ -2,6 +2,8 @@
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
+use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCAnNotBeDecreased;
+use MolsM\RandomFloatDataSetGenerator\Exceptions\NotSuitableRandomStepHasBeenChoosen;
 use function \MolsM\RandomFloatDataSetGenerator\shuffle_assoc;
 
 class DataSet implements DataSetInterface
@@ -15,7 +17,7 @@ class DataSet implements DataSetInterface
     ];
 
     /**
-     * @var array
+     * @var DatumInterface[]
      */
     private $set = [];
 
@@ -84,6 +86,9 @@ class DataSet implements DataSetInterface
             $datum->fillTillMaximum();
         }
 
+        $excludedDatumsIds = [];
+        $jumpToLowest = 0;
+
         while ($this->amount !== ($sum = $this->getSum())) {
             if ($sum < $this->amount) {
                 throw new \LogicException(
@@ -92,12 +97,31 @@ class DataSet implements DataSetInterface
             }
 
             $difference = $sum - $this->amount;
-            $excludedDatums = [];
+            $datumValueWasDecreased = false;
+            $datumId = $this->getAvailableDatumIdFromSet($excludedDatumsIds);
 
-            foreach ($this->getRandomSteps($difference) as $randomStep) {
+            foreach ($this->getRandomSteps($difference, $jumpToLowest) as $randomByAmount) {
                 try {
-                    $datum = $this->getRandomAvailableDatumFromSet($excludedDatums);
-                } catch (\Exception $exception) {
+                    if ($sum - $randomByAmount < $this->amount) {
+                        throw new NotSuitableRandomStepHasBeenChoosen(
+                            'Can not be decreased. Result sum would be lower'
+                        );
+                    }
+                    $this->set[$datumId]->decreaseValue($randomByAmount);
+                    $datumValueWasDecreased = true;
+                } catch (NotSuitableRandomStepHasBeenChoosen $exception) {
+                    $jumpToLowest++;
+                    break;
+                } catch (DatumValueCAnNotBeDecreased $exception) {
+                    continue;
+                }
+            }
+
+            if (!$datumValueWasDecreased) {
+                $excludedDatumsIds[] = $datumId;
+
+                if (count($excludedDatumsIds) === count($this->set)) {
+                    $excludedDatumsIds = [];
                 }
             }
         }
@@ -117,17 +141,27 @@ class DataSet implements DataSetInterface
 
     /**
      * @param float $difference
+     * @param int $jumpToLowest
      * @return array|mixed
      */
-    private function getRandomSteps(float $difference)
+    private function getRandomSteps(float $difference, $jumpToLowest = 0)
     {
         $result = [];
+        $jumpCounter = 0;
 
         foreach ($this->preDefinedRandomStepsAmountMap as $amount => $values) {
             if ((float) $amount <= $difference) {
+                if ($jumpCounter < $jumpToLowest) {
+                    $jumpCounter++;
+                    continue;
+                }
                 $result = shuffle_assoc($values);
                 break;
             }
+        }
+
+        if (empty($result)) {
+            throw new \LogicException('Can not pick any step');
         }
 
         return $result;
@@ -135,10 +169,16 @@ class DataSet implements DataSetInterface
 
     /**
      * @param array $except
-     * @return DatumInterface
+     * @return string
      */
-    private function getRandomAvailableDatumFromSet(array $except): DatumInterface
+    private function getAvailableDatumIdFromSet(array $except): string
     {
-        // TODO: Implement logic
+        foreach ($this->set as $id => $datum) {
+            if (!\in_array($id, $except, false)) {
+                return $id;
+            }
+        }
+
+        throw new \LogicException('Can not retrieve any datum');
     }
 }

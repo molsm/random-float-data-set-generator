@@ -2,6 +2,8 @@
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
+use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCAnNotBeDecreased;
+
 class Datum implements DatumInterface
 {
     /**
@@ -40,10 +42,16 @@ class Datum implements DatumInterface
     /**
      * @param $byAmount
      * @return DatumInterface
+     * @throws DatumValueCAnNotBeDecreased
      */
     public function decreaseValue(float $byAmount): DatumInterface
     {
-        // TODO: Implement decreaseValue() method.
+        if (!$this->canBeDecreased($byAmount)) {
+            throw new DatumValueCAnNotBeDecreased('Datum can not be decreased');
+        }
+
+        $this->value -= $byAmount;
+
         return $this;
     }
 
@@ -120,5 +128,14 @@ class Datum implements DatumInterface
     public function canBeSkippable(): bool
     {
         return $this->skip;
+    }
+
+    /**
+     * @param float $byAmount
+     * @return bool
+     */
+    private function canBeDecreased(float $byAmount): bool
+    {
+        return $this->value - $byAmount >= $this->from;
     }
 }

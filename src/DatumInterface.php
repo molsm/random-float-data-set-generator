@@ -2,6 +2,8 @@
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
+use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCAnNotBeDecreased;
+
 interface DatumInterface
 {
     /**
@@ -18,6 +20,7 @@ interface DatumInterface
     /**
      * @param $byAmount
      * @return DatumInterface
+     * @throws DatumValueCAnNotBeDecreased
      */
     public function decreaseValue(float $byAmount): DatumInterface;
 
