@@ -59,6 +59,7 @@ class DatumTest extends TestCase
      */
     public function testSetPositivePriorityNumber()
     {
+        /** @noinspection UnnecessaryAssertionInspection */
         $this->assertInstanceOf(DatumInterface::class, (new Datum())->setPriority(1));
     }
 }

@@ -8,6 +8,6 @@
 
 namespace MolsM\RandomFloatDataSetGenerator\Exceptions;
 
-class DatumValueCAnNotBeDecreased extends \Exception
+class DatumValueCanNotBeDecreased extends \Exception
 {
 }

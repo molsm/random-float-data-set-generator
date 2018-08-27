@@ -71,9 +71,9 @@ class DataSetTest extends TestCase
      */
     public function testGenerateWithPriority($amount, array $data, array $datumMustBeSettled)
     {
-        $this->markTestIncomplete(
-            'Code logic for this test is not completed yet'
-        );
+//        $this->markTestIncomplete(
+//            'Code logic for this test is not completed yet'
+//        );
 
         $dataSet = new DataSet($amount);
 
@@ -106,10 +106,21 @@ class DataSetTest extends TestCase
                 [
                     '1' => ['from' => 10.0, 'to' => 50.0, 'priority' => 3],
                     '2' => ['from' => 5.0, 'to' => 50.0, 'priority' => 100],
-                    '3' => ['from' => 45.0, 'to' => 50.0, 'priority' => 1]
+                    '3' => ['from' => 35.0, 'to' => 50.0, 'priority' => 1]
                 ],
                 [1]
             ],
+            [
+                70.0,
+                [
+                    '1' => ['from' => 0.0, 'to' => 50.0, 'priority' => 3],
+                    '2' => ['from' => 0.0, 'to' => 50.0, 'priority' => 100],
+                    '3' => ['from' => 35.0, 'to' => 50.0, 'priority' => 1],
+                    '4' => ['from' => 25.0, 'to' => 50.0, 'priority' => 2],
+                    '5' => ['from' => 0.0, 'to' => 50.0, 'priority' => 1],
+                ],
+                [3, 4]
+            ]
         ];
     }
 }

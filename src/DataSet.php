@@ -2,7 +2,7 @@
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
-use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCAnNotBeDecreased;
+use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCanNotBeDecreased;
 use MolsM\RandomFloatDataSetGenerator\Exceptions\NotSuitableRandomStepHasBeenChoosen;
 use function \MolsM\RandomFloatDataSetGenerator\shuffle_assoc;
 
@@ -112,7 +112,7 @@ class DataSet implements DataSetInterface
                 } catch (NotSuitableRandomStepHasBeenChoosen $exception) {
                     $jumpToLowest++;
                     break;
-                } catch (DatumValueCAnNotBeDecreased $exception) {
+                } catch (DatumValueCanNotBeDecreased $exception) {
                     continue;
                 }
             }

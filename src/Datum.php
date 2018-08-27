@@ -47,7 +47,7 @@ class Datum implements DatumInterface
     public function decreaseValue(float $byAmount): DatumInterface
     {
         if (!$this->canBeDecreased($byAmount)) {
-            throw new DatumValueCAnNotBeDecreased('Datum can not be decreased');
+            throw new DatumValueCanNotBeDecreased('Datum can not be decreased');
         }
 
         $this->value -= $byAmount;
