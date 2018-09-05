@@ -37,7 +37,8 @@ class DataSetTest extends TestCase
             );
         }
 
-        $resultSum = array_reduce($dataSet->generate(), function ($carry, $datum) {
+        $generatedDataSet = $dataSet->generate();
+        $resultSum = array_reduce($generatedDataSet, function ($carry, $datum) {
             $carry += $datum;
             return $carry;
         });
@@ -53,6 +54,7 @@ class DataSetTest extends TestCase
     public function correctGenerationWithoutPriority(): array
     {
         return [
+            [69.0, [[10.0, 50.0], [5.0, 50.0], [5.0, 50.0]]],
             [65.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
             [145.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
             [150.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
@@ -71,10 +73,6 @@ class DataSetTest extends TestCase
      */
     public function testGenerateWithPriority($amount, array $data, array $datumMustBeSettled)
     {
-//        $this->markTestIncomplete(
-//            'Code logic for this test is not completed yet'
-//        );
-
         $dataSet = new DataSet($amount);
 
         foreach ($data as $id => $values) {
@@ -89,6 +87,10 @@ class DataSetTest extends TestCase
             $carry += $datum;
             return $carry;
         });
+
+        foreach ($datumMustBeSettled as $id) {
+            $this->assertTrue($generatedDaset[$id] > 0.0, 'Not settled with priority');
+        }
 
         $this->assertEquals($amount, $resultSum);
     }
@@ -108,7 +110,7 @@ class DataSetTest extends TestCase
                     '2' => ['from' => 5.0, 'to' => 50.0, 'priority' => 100],
                     '3' => ['from' => 35.0, 'to' => 50.0, 'priority' => 1]
                 ],
-                [1]
+                []
             ],
             [
                 70.0,
@@ -116,10 +118,32 @@ class DataSetTest extends TestCase
                     '1' => ['from' => 0.0, 'to' => 50.0, 'priority' => 3],
                     '2' => ['from' => 0.0, 'to' => 50.0, 'priority' => 100],
                     '3' => ['from' => 35.0, 'to' => 50.0, 'priority' => 1],
-                    '4' => ['from' => 25.0, 'to' => 50.0, 'priority' => 2],
-                    '5' => ['from' => 0.0, 'to' => 50.0, 'priority' => 1],
+                    '4' => ['from' => 0.0, 'to' => 50.0, 'priority' => 1],
+                    '5' => ['from' => 0.0, 'to' => 50.0, 'priority' => 2],
                 ],
                 [3, 4]
+            ],
+            [
+                599.0,
+                [
+                    '1' => ['from' => 0.0, 'to' => 600.0, 'priority' => 3],
+                    '2' => ['from' => 0.0, 'to' => 500.0, 'priority' => 100],
+                    '3' => ['from' => 0.0, 'to' => 50.0, 'priority' => 1],
+                    '4' => ['from' => 0.0, 'to' => 50.0, 'priority' => 1],
+                    '5' => ['from' => 0.0, 'to' => 50.0, 'priority' => 0],
+                ],
+                [3, 4, 1]
+            ],
+            [
+                601.0,
+                [
+                    '1' => ['from' => 0.0, 'to' => 600.0, 'priority' => 3],
+                    '2' => ['from' => 0.0, 'to' => 500.0, 'priority' => 0],
+                    '3' => ['from' => 0.0, 'to' => 50.0, 'priority' => 2],
+                    '4' => ['from' => 0.0, 'to' => 600.0, 'priority' => 1],
+                    '5' => ['from' => 0.0, 'to' => 50.0, 'priority' => 0],
+                ],
+                [4, 3]
             ]
         ];
     }

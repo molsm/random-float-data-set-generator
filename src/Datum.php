@@ -95,7 +95,7 @@ class Datum implements DatumInterface
      */
     public function setPriority(int $priority): DatumInterface
     {
-        if ($priority <= 0) {
+        if ($priority < 0) {
             throw new \LogicException('Priority must be positive integer number');
         }
 

@@ -9,9 +9,6 @@ use function \MolsM\RandomFloatDataSetGenerator\shuffle_assoc;
 class DataSet implements DataSetInterface
 {
     const PRE_DEFINED_RANDOM_STEPS_AMOUNT_MAP = [
-        '500.0' => [100.0, 50.0],
-        '100.0' => [25.0, 10.0],
-        '10.0' => [5.0],
         '5.0' => [5.0],
         '1.0' => [1.0],
     ];
@@ -132,7 +129,7 @@ class DataSet implements DataSetInterface
      */
     private function getSum(): float
     {
-        return array_reduce($this->set, function ($sum, $datum) {
+        return (float) array_reduce($this->set, function ($sum, $datum) {
             /** @var DatumInterface $datum */
             $sum += $datum->getValue();
             return $sum;
@@ -175,7 +172,36 @@ class DataSet implements DataSetInterface
      */
     private function getAvailableDatumIdFromSet(array $except): string
     {
+        $hasPrioritySettled = false;
         foreach ($this->set as $id => $datum) {
+            if ($datum->getPriority() !== 0) {
+                $hasPrioritySettled = true;
+                break;
+            }
+        }
+
+        if ($hasPrioritySettled) {
+            $sorting = function ($a, $b) {
+                /** @var $a DatumInterface */
+                /** @var $b DatumInterface */
+                if ($a->getPriority() === $b->getPriority()) {
+                    return 0;
+                }
+
+                if ($b->getPriority() === 0) {
+                    return 1;
+                }
+
+                return ($a->getPriority() < $b->getPriority()) ? 1 : -1;
+            };
+
+            $tempSet = $this->set;
+            uasort($tempSet, $sorting);
+        } else {
+            $tempSet = shuffle_assoc($this->set);
+        }
+
+        foreach ($tempSet as $id => $datum) {
             if (!\in_array($id, $except, false)) {
                 return (string) $id;
             }
