@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
@@ -140,6 +140,8 @@ class DataSet implements DataSetInterface
     }
 
     /**
+     * Shuffle - key of random here
+     *
      * @param float $difference
      * @param int $jumpToLowest
      * @return array|mixed
@@ -175,7 +177,7 @@ class DataSet implements DataSetInterface
     {
         foreach ($this->set as $id => $datum) {
             if (!\in_array($id, $except, false)) {
-                return $id;
+                return (string) $id;
             }
         }
 
