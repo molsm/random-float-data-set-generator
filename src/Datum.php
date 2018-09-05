@@ -2,7 +2,7 @@
 
 namespace MolsM\RandomFloatDataSetGenerator;
 
-use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCAnNotBeDecreased;
+use MolsM\RandomFloatDataSetGenerator\Exceptions\DatumValueCanNotBeDecreased;
 
 class Datum implements DatumInterface
 {
@@ -42,7 +42,7 @@ class Datum implements DatumInterface
     /**
      * @param $byAmount
      * @return DatumInterface
-     * @throws DatumValueCAnNotBeDecreased
+     * @throws DatumValueCanNotBeDecreased
      */
     public function decreaseValue(float $byAmount): DatumInterface
     {
