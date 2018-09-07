@@ -19,5 +19,8 @@
             "MolsM\\RandomFloatDataSetGenerator\\": "src/"
         },
         "files": ["src/helper.php"]
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
