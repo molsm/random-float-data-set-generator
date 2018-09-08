@@ -63,7 +63,7 @@ class Datum implements DatumInterface
      */
     public function shouldBeBetween(float $from, float $to): DatumInterface
     {
-        if ($from >= $to) {
+        if ($from > $to) {
             throw new \LogicException('Incorrect data ranges');
         }
 

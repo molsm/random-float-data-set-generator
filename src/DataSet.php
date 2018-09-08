@@ -9,6 +9,8 @@ use function \MolsM\RandomFloatDataSetGenerator\shuffle_assoc;
 class DataSet implements DataSetInterface
 {
     const PRE_DEFINED_RANDOM_STEPS_AMOUNT_MAP = [
+        '100.0' => [15.0, 10.0],
+        '10.0' => [5.0],
         '5.0' => [5.0],
         '1.0' => [1.0],
     ];

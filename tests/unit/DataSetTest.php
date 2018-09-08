@@ -54,6 +54,7 @@ class DataSetTest extends TestCase
     public function correctGenerationWithoutPriority(): array
     {
         return [
+            [150.0, [[100.0, 250.0], [0.0, 250.0]]],
             [69.0, [[10.0, 50.0], [5.0, 50.0], [5.0, 50.0]]],
             [65.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
             [145.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
