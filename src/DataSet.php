@@ -63,6 +63,13 @@ class DataSet implements DataSetInterface
         if (empty($this->set)) {
             throw new \LogicException('Datum in set is empty. Expected at least one');
         }
+        if ($this->amount < array_reduce($this->set, function ($sum, $datum) {
+            /** @var DatumInterface $datum */
+            $sum += $datum->getFrom();
+            return $sum;
+        })) {
+            throw new \LogicException('Amount is lower than sum of datums minimum ranges');
+        }
 
         $this->processSet();
 

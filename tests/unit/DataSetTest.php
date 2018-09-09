@@ -21,6 +21,18 @@ class DataSetTest extends TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     * @covers DataSet::generate()
+     */
+    public function testThrowsExceptionWhenDatumMinRangeIsMoreThanDefinedAmount()
+    {
+        (new DataSet(150.0))
+            ->addDatum((new Datum())->shouldBeBetween(100.0, 250.0), 1)
+            ->addDatum((new Datum())->shouldBeBetween(100.0, 250.0), 2)
+            ->generate();
+    }
+
+    /**
      * @dataProvider correctGenerationWithoutPriority
      * @covers DataSet::generate()
      * @param $amount
@@ -57,6 +69,7 @@ class DataSetTest extends TestCase
             [150.0, [[100.0, 250.0], [0.0, 250.0]]],
             [69.0, [[10.0, 50.0], [5.0, 50.0], [5.0, 50.0]]],
             [65.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
+            [65.0, [[10.0, 50.0], [10.0, 50.0], [45.0, 50.0]]],
             [145.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
             [150.0, [[10.0, 50.0], [5.0, 50.0], [45.0, 50.0]]],
             [14.0, [[10.0, 50.0], [0.0, 50.0], [0.0, 50.0]]],

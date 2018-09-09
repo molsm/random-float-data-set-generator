@@ -12,6 +12,11 @@ interface DatumInterface
     public function getValue(): float;
 
     /**
+     * @return mixed
+     */
+    public function getFrom();
+
+    /**
      * @return DatumInterface
      * @throws \LogicException
      */

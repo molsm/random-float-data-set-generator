@@ -40,6 +40,14 @@ class Datum implements DatumInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
      * @param $byAmount
      * @return DatumInterface
      * @throws DatumValueCanNotBeDecreased
