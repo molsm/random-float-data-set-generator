@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/molsm/random-float-data-set-generator/badge.svg?branch=master)](https://coveralls.io/github/molsm/random-float-data-set-generator?branch=master)
 
 Library that helps to generate random float datums in data set by defined rules.
+Sum of datums values are equal to defined amount in data set.
 
 # Getting started
 
@@ -19,7 +20,29 @@ composer require molsm/random-float-data-set-generator
 
 # Usage
 
-Add usage
+1. Create `DataSet` object
+
+```
+$dataSet = new DataSet(5.0)
+```
+
+2. Add Datum to DataSet with your defined rules
+
+```
+$dataset->addDatum((new Datum())->shouldBeBetween(0.0, 10.0), 'id-example');
+```
+
+3. Call `generate` method
+
+```
+$result = $dataSet->generate();
+```
+
+4. Use resulting array
+
+```
+array('id-example' => 5.0)
+```
 
 # Test
 
@@ -32,4 +55,4 @@ composer test
 
 # License
 
-Add license
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
