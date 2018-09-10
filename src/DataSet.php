@@ -92,9 +92,6 @@ class DataSet implements DataSetInterface
             $datum->fillTillMaximum();
         }
 
-        $excludedDatumsIds = [];
-        $jumpToLowest = 0;
-
         while ($this->amount !== ($sum = $this->getSum())) {
             if ($sum < $this->amount) {
                 throw new \LogicException(
@@ -104,31 +101,32 @@ class DataSet implements DataSetInterface
 
             $difference = $sum - $this->amount;
             $datumValueWasDecreased = false;
-            $datumId = $this->getAvailableDatumIdFromSet($excludedDatumsIds);
 
-            foreach ($this->getRandomSteps($difference, $jumpToLowest) as $randomByAmount) {
-                try {
-                    if ($sum - $randomByAmount < $this->amount) {
-                        throw new NotSuitableRandomStepHasBeenChoosen(
-                            'Can not be decreased. Result sum would be lower'
-                        );
+            foreach ($this->getAvailableDatumsFromSet() as $datum) {
+                foreach ($this->getRandomSteps($difference) as $randomByAmount) {
+                    try {
+                        if ($sum - $randomByAmount < $this->amount) {
+                            throw new NotSuitableRandomStepHasBeenChoosen(
+                                'Can not be decreased. Result sum would be lower'
+                            );
+                        }
+                        $datum->decreaseValue($randomByAmount);
+                        $datumValueWasDecreased = true;
+                        break;
+                    } catch (NotSuitableRandomStepHasBeenChoosen $exception) {
+                        continue;
+                    } catch (DatumValueCanNotBeDecreased $exception) {
+                        continue;
                     }
-                    $this->set[$datumId]->decreaseValue($randomByAmount);
-                    $datumValueWasDecreased = true;
-                } catch (NotSuitableRandomStepHasBeenChoosen $exception) {
-                    $jumpToLowest++;
+                }
+
+                if ($datumValueWasDecreased) {
                     break;
-                } catch (DatumValueCanNotBeDecreased $exception) {
-                    continue;
                 }
             }
 
             if (!$datumValueWasDecreased) {
-                $excludedDatumsIds[] = $datumId;
-
-                if (count($excludedDatumsIds) === count($this->set)) {
-                    $excludedDatumsIds = [];
-                }
+                throw new \LogicException('Processed all datums and values was not decreased');
             }
         }
     }
@@ -146,40 +144,21 @@ class DataSet implements DataSetInterface
     }
 
     /**
-     * Shuffle - key of random here
-     *
      * @param float $difference
-     * @param int $jumpToLowest
-     * @return array|mixed
+     * @return array
      */
-    private function getRandomSteps(float $difference, $jumpToLowest = 0)
+    private function getRandomSteps(float $difference): array
     {
-        $result = [];
-        $jumpCounter = 0;
+        $multiplier = $difference >= 100 ? floor($difference / 100): 1;
+        $randomSteps = shuffle_assoc([5.0 * $multiplier, 10.0 * $multiplier]);
 
-        foreach ($this->preDefinedRandomStepsAmountMap as $amount => $values) {
-            if ((float) $amount <= $difference) {
-                if ($jumpCounter < $jumpToLowest) {
-                    $jumpCounter++;
-                    continue;
-                }
-                $result = shuffle_assoc($values);
-                break;
-            }
-        }
-
-        if (empty($result)) {
-            throw new \LogicException('Can not pick any step');
-        }
-
-        return $result;
+        return array_merge($randomSteps, [5.0, 1.0]);
     }
 
     /**
-     * @param array $except
-     * @return string
+     * @return array
      */
-    private function getAvailableDatumIdFromSet(array $except): string
+    private function getAvailableDatumsFromSet(): array
     {
         $hasPrioritySettled = false;
         foreach ($this->set as $id => $datum) {
@@ -204,18 +183,12 @@ class DataSet implements DataSetInterface
                 return ($a->getPriority() < $b->getPriority()) ? 1 : -1;
             };
 
-            $tempSet = $this->set;
-            uasort($tempSet, $sorting);
+            $datums = $this->set;
+            uasort($datums, $sorting);
         } else {
-            $tempSet = shuffle_assoc($this->set);
+            $datums = shuffle_assoc($this->set);
         }
 
-        foreach ($tempSet as $id => $datum) {
-            if (!\in_array($id, $except, false)) {
-                return (string) $id;
-            }
-        }
-
-        throw new \LogicException('Can not retrieve any datum');
+        return $datums;
     }
 }
