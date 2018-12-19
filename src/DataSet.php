@@ -19,6 +19,11 @@ class DataSet implements DataSetInterface
     private $amount;
 
     /**
+     * @var []
+     */
+    private $availableDatums;
+
+    /**
      * DataSet constructor.
      * @param float $amount
      * @param array|null $preDefinedRandomStepsAmountMap
@@ -146,6 +151,10 @@ class DataSet implements DataSetInterface
      */
     private function getAvailableDatumsFromSet(): array
     {
+        if ($this->availableDatums) {
+            return $this->availableDatums;
+        }
+
         $hasPrioritySettled = false;
         foreach ($this->set as $id => $datum) {
             if ($datum->getPriority() !== 0) {
@@ -159,7 +168,9 @@ class DataSet implements DataSetInterface
                 /** @var $a DatumInterface */
                 /** @var $b DatumInterface */
                 if ($a->getPriority() === $b->getPriority()) {
-                    return 0;
+                    $randomInt = \random_int(0, 1);
+
+                    return $randomInt === 0 ? -1 : 1;
                 }
 
                 if ($b->getPriority() === 0) {
@@ -175,6 +186,6 @@ class DataSet implements DataSetInterface
             $datums = shuffle_assoc($this->set);
         }
 
-        return $datums;
+        return $this->availableDatums = $datums;
     }
 }

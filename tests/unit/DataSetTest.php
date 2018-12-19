@@ -121,6 +121,15 @@ class DataSetTest extends TestCase
                 65.0,
                 [
                     '1' => ['from' => 10.0, 'to' => 50.0, 'priority' => 3],
+                    '2' => ['from' => 5.0, 'to' => 50.0, 'priority' => 1],
+                    '3' => ['from' => 35.0, 'to' => 50.0, 'priority' => 1]
+                ],
+                []
+            ],
+            [
+                65.0,
+                [
+                    '1' => ['from' => 10.0, 'to' => 50.0, 'priority' => 3],
                     '2' => ['from' => 5.0, 'to' => 50.0, 'priority' => 100],
                     '3' => ['from' => 35.0, 'to' => 50.0, 'priority' => 1]
                 ],
